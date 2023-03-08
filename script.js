@@ -94,12 +94,17 @@ function addLevelExample(level, sign = 'plus') {
             document.getElementById('textStart').style.display = 'none';
             document.getElementById('textChoice').style.display = 'block';
             document.querySelector('.answer').style.display = 'block';
+            document.querySelector('.cover').style.display = 'block';
 
             levelBlock.querySelectorAll(`[data-ball = ${dataSet}]`).forEach((item)=> {
                 console.log(item);
                 item.style.stroke = 'orange';
             })
 
+            document.getElementById('verify').addEventListener('click', (e) => {
+                e.preventDefault();
+
+            })
 
 
         })

@@ -10,12 +10,24 @@
 }
 .game__field {
     /*height: 800px;*/
+    position: relative;
     flex: 0 1 50%;
     /*background-image: url(../img/13312345_119619116.jpg);*/
     /*background-position: center;*/
     /*background-repeat: no-repeat;*/
     /*background-size: cover;*/
     /*color: #554c42;*/
+}
+
+.cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    background-color: rgba(21, 20, 20, 0.1);
+    display: none;
 }
 
 
@@ -98,6 +110,7 @@ text:hover {
     width: 50%;
     border-radius: 20px;
 }
+
 
 /* MODAL */
 
@@ -196,6 +209,7 @@ text:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 15;
 }
 .modal--open {
     pointer-events: auto;
