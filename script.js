@@ -26,21 +26,11 @@ btnClose.addEventListener('click', (event) => {
 })
 
 
-// const container = document.querySelector('.container');
-// container.addEventListener('click', (e) => {
-//     console.log(e.target)
-//     e.target.style.stroke = 'red';
-// })
-
-
-
-
-
 const level1 = document.querySelector('.level1');
 let result = [];
 let n = 0
 
-function addLevelExample(level, sign = 'plus') {
+function addLevelExample(level, sign) {
     const levelBlock = document.querySelector('.level');
     const textExample = levelBlock.querySelectorAll('text');
     textExample.forEach((itemText)=> {
@@ -86,30 +76,71 @@ function addLevelExample(level, sign = 'plus') {
                 }
                 break;
         }
-
-        itemText.dataset.result = result[n];
+        console.log(result[n]);
+        let dataSet = itemText.dataset;
+        dataSet.result = result[n];
         itemText.addEventListener('click', (e) => {
-            let dataSet = itemText.dataset.ball;
+            console.log("Выбрали текст - ", e.target)
+            // let dataSet = itemText.dataset.ball;
 
             document.getElementById('textStart').style.display = 'none';
             document.getElementById('textChoice').style.display = 'block';
             document.querySelector('.answer').style.display = 'block';
             document.querySelector('.cover').style.display = 'block';
 
-            levelBlock.querySelectorAll(`[data-ball = ${dataSet}]`).forEach((item)=> {
-                console.log(item);
+            let ballTextExample;
+
+            levelBlock.querySelectorAll(`[data-ball = ${dataSet.ball}]`).forEach((item) => {
                 item.style.stroke = 'orange';
+                ballTextExample = item;
             })
 
-            document.getElementById('verify').addEventListener('click', (e) => {
-                e.preventDefault();
 
+
+            console.log("ballTextExample ", ballTextExample)
+            console.log("1 вариант - ", dataSet.result)
+            const verify = document.querySelector('.verify');
+            const decision = document.getElementById('decision')
+            let hren = ballTextExample.dataset.result;
+
+
+            verify.addEventListener('click', (e) => {
+
+                console.log(ballTextExample.dataset.result);
+                console.log(hren);
+                e.preventDefault();
+                // e.stopPropagation();
+                let resultForm = decision.value;
+                console.log(resultForm)
+                if (resultForm === dataSet.result) {
+                    levelBlock.querySelectorAll(`[data-ball = ${dataSet.ball}]`).forEach((item) => {
+                        item.style.stroke = 'red';
+                        item.style.fill = 'red';
+                    });
+                    document.querySelector('.answer').style.display = 'none';
+                    document.querySelector('.cover').style.display = 'none';
+                    document.getElementById('textStart').style.display = 'block';
+                    document.getElementById('textChoice').style.display = 'none';
+                    ballTextExample.style.display = 'none';
+                    decision.value = '';
+                    console.log('Верно!');
+                    console.log(result)
+                } else {
+                    console.log('неправильно!!!!');
+                    document.querySelector('.title-error').style.display = 'block';
+                    document.querySelector('.answer').style.display = 'none';
+                    setTimeout(() => {
+                        document.querySelector('.title-error').style.display = 'none';
+                        document.querySelector('.answer').style.display = 'block';
+                    }, 2000);
+                    // document.getElementById("answerform").reset();
+                }
+
+                // document.forms.answerForm.elements.answer.value = '';
             })
 
 
         })
-
-
 
         n++;
     })
@@ -118,69 +149,3 @@ function addLevelExample(level, sign = 'plus') {
 }
 addLevelExample(level1, 'plus');
 
-
-// const table = document.querySelector('.table');
-
-// function tableFill(quantity) {
-//     for (let i=0; i<quantity; i++) {
-//         let tr = document.createElement('tr');
-//         table.append(tr);
-//
-//         for (let j=0; j<quantity; j++) {
-//             let td = document.createElement('td');
-//             td.classList.add('cell');
-//             tr.append(td);
-//
-//             let divCell = document.createElement('div');
-//             divCell.classList.add('cell__field');
-//             td.append(divCell);
-//
-//             let textExample = document.createElement('p');
-//             textExample.classList.add('example');
-//
-//             divCell.append(textExample);
-//             // textExample.textContent = 'Пример';
-//
-//         }
-//     }
-//
-//     const exampleField = document.querySelectorAll('.example');
-//
-//     let arrExample = [];
-//     let x = 0;
-//     exampleField.forEach((exampleItem) => {
-//         x++;
-//         exampleItem.id = x;
-//         let a = Math.floor(Math.random()*10);
-//         let b = Math.floor(Math.random()*10);
-//
-//         exampleItem.textContent = a + ' + ' + b;
-//     })
-// }
-
-// function levelSetting(level) {
-//     switch (level) {
-//         case 2:
-//             quantity = 3;
-//             break;
-//         case 3:
-//             quantity = 4;
-//             break;
-//         default:
-//             quantity = 2;
-//     }
-//     tableFill(quantity);
-// }
-//
-// levelSetting(3);
-
-
-
-// const cellField = document.querySelectorAll('.cell__field');
-//
-//
-// cellField.forEach((item)=> {
-//     item.addEventListener('click', (event) => {
-//         event.target.classList.add('decided');
-//     })
-// })

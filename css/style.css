@@ -109,6 +109,12 @@ text:hover {
 #decision {
     width: 50%;
     border-radius: 20px;
+    text-align: center;
+}
+.title-error {
+    display: none;
+    text-align: center;
+    color: red;
 }
 
 

@@ -143,14 +143,15 @@
                                 C373.02,272.94,369.45,304.09,369.45,304.09z"/>
 
                                 <ellipse data-ball="first" transform="matrix(0.9954 -0.0955 0.0955 0.9954 -13.9715 35.397)"
-                                         class="st1" cx="362.81" cy="163.66" rx="114.89" ry="148.6"/>
+                                         class="figure st1" cx="362.81" cy="163.66" rx="114.89" ry="148.6"/>
                                 <path class="st1"
                                       d="M388.41,338.54c0,0,19.59,72.52,19.59,93.2c0,0,29.49,171.96,13.02,188.43c0,0-12.26,151.66,15.32,191.49
                                         c0,0,15.32-0.77,15.32,122.55L448.6,1000" />
                                 <path data-ball="second" class="st1" d="M532.99,357.03l-21.9,11.86c0,0-15.67,7.28,8.99,21.12l23.58,13.45c0,0,12.84,8.19,13.55-28.63
                                         C557.91,338.01,532.99,357.03,532.99,357.03z"/>
 
-                                <ellipse data-ball="second" transform="matrix(0.272 -0.9623 0.9623 0.272 222.528 758.3049)" class="st1" cx="612.45" cy="232.08" rx="148.6" ry="114.89"/>
+                                <ellipse data-ball="second" transform="matrix(0.272 -0.9623 0.9623 0.272 222.528 758.3049)"
+                                         class="figure st1" cx="612.45" cy="232.08" rx="148.6" ry="114.89"/>
                                 <path class="st1" d="M531.7,392.68c0,0-36.87,117.19-25.52,148.6c0,0,16.99,72.77,0,189.96c0,0-20.82,96.51-34.61,140.17
                                         c0,0-24.13,113.74-19.91,117.96"/>
                                 <text data-ball="first" transform="matrix(1 0 0 1 290 184.3405)" class="st2 st3"></text>
@@ -171,29 +172,16 @@
             <p class="text">Давай вместе разукрасим картинку!</p>
             <p id="textStart" class="text">Кликни мышкой по примеру, который будем решать</p>
             <p id="textChoice" class="text">Реши пример, напиши верный ответ и нажми "Проверить"</p>
+            <h2 class="title-error">Где-то закралась ошибка! Подумай получше!</h2>
             <div class="answer">
-                <form name="answerForm" class="answer__form">
+                <div id="answerform" name="answerform" class="answer__form">
                     <div class="answer_div">
-<!--                        <input class="answer__input" id="answer1" type="radio" name="answer" value="" ><label-->
-<!--                            for="answer1">1</label>-->
-<!--                    </div>-->
-<!--                    <div class="answer_div">-->
-<!--                        <input class="answer__input" id="answer2" type="radio" name="answer" value=""><label-->
-<!--                            for="answer2">2</label>-->
-<!--                    </div>-->
-<!--                    <div class="answer_div">-->
-<!--                        <input class="answer__input" id="answer3" type="radio" name="answer" value=""><label-->
-<!--                            for="answer3">3</label>-->
-<!--                    </div>-->
-<!--                    <div class="answer_div">-->
-<!--                        <input class="answer__input" id="answer4" type="radio" name="answer" value=""><label-->
-<!--                            for="answer4">4</label>-->
-<!--                    -->
+
                         <label for="decision">Твой ответ</label>
-                        <input id="decision" type="number" required>
+                        <input id="decision" name="answer" type="number" required>
                     </div>
-                    <input id="verify" class="modal-btn" type="submit" value="Проверить">
-                </form>
+                    <button id="verify" class="verify modal-btn">Проверить</button>
+                </div>
             </div>
         </div>
     </section>
