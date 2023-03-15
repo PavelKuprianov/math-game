@@ -116,6 +116,26 @@ text:hover {
     text-align: center;
     color: red;
 }
+.title-correctly {
+    display: none;
+    text-align: center;
+    color: green;
+}
+#inputForm {
+    width: 50%;
+    text-align: center;
+}
+.title-result {
+    text-align: center;
+    color: greenyellow;
+    display: none;
+}
+.title-score {
+    text-align: center;
+    color: green;
+    display: none;
+}
+
 
 
 /* MODAL */
