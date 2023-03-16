@@ -30,59 +30,110 @@ btnClose.addEventListener('click', (event) => {
 })
 let z = 0;
 let gameScore = 0;
-const level1 = document.querySelector('.level1');
+const level1 = document.getElementById('level1');
+const level2 = document.getElementById('level2');
 let result = [];
-let n = 0
-const levelBlock = document.querySelector('.level');
+let n = 0;
+const buttonLevel = document.querySelector('.button-level');
+const previous = document.getElementById('previous');
+const thisLevel = document.getElementById('this');
+const next = document.getElementById('next');
 
-function addLevelExample(level, sign) {
-    
+function selectAction(itemText, n) {
+    let arrSign = ['plus', 'minus', 'multiply', 'plus', 'plus', 'minus', 'multiply', 'plus', 'plus', 'minus', 'plus']
+    let sign = arrSign[Math.floor(Math.random()*10)];
+
+    let a = Math.floor(Math.random()*10);
+    let b = Math.floor(Math.random()*10);
+
+    switch (sign) {
+        case 'plus':
+            itemText.textContent = a + ' + ' + b;
+            result[n] = a+b;
+            break;
+        case 'minus':
+            if (a > b ) {
+                itemText.textContent = a + ' - ' + b;
+                result[n] = a-b;
+            } else {
+                itemText.textContent = b + ' - ' + a;
+                result[n] = b-a;
+            }
+            break;
+        case 'multiply':
+            itemText.textContent = a + ' x ' + b;
+            result[n] = a*b;
+            break;
+        case 'division':
+            if (a > b ) {
+                if(b===0) {
+                    while (b===0) {
+                        b = Math.floor(Math.random()*10)
+                    }
+                }
+                itemText.textContent = a + ' : ' + b;
+                result[n] = a/b;
+            } else {
+                if(a===0) {
+                    while (a===0) {
+                        a = Math.floor(Math.random()*10)
+                    }
+                }
+                itemText.textContent = b + ' : ' + a;
+                result[n] = b/a;
+            }
+            break;
+    }
+    return result[n]
+}
+
+
+// const levelBlock = document.getElementById('level1');
+
+function addLevelExample(level, num) {
+    result.length = 0;
+    n = 0;
+    console.log(result)
+    level.querySelectorAll(`[data-level = '${num}']`).forEach((itemLevel)=> {
+        itemLevel.style.display = 'block';
+        itemLevel.style.stroke = '';
+        itemLevel.style.fill = '';
+        itemLevel.dataset.result = '';
+    })
+
+    console.log(level)
+
+    document.getElementById('textStart').style.display = 'block';
+    document.getElementById('textChoice').style.display = 'none';
+    document.querySelector('.answer').style.display = 'none';
+    document.querySelector('.cover').style.display = 'none';
+
+    level.style.display = 'block';
+    const titleLevel = document.querySelector('.title');
+
+    let numberLevel = 0;
+
+    if (level.classList.contains('level1')) {
+        titleLevel.textContent ='Уровень 1';
+        numberLevel = 1;
+    } else if ((level.classList.contains('level2'))) {
+        titleLevel.textContent ='Уровень 2';
+        numberLevel = 2;
+    } else {
+        titleLevel.textContent ='Уровень 2';
+        numberLevel = 3;
+    }
+
     const textExample = level.querySelectorAll('text');
+
     let quantityExamples = textExample.length
     console.log(quantityExamples)
     textExample.forEach((itemText)=> {
-        let a = Math.floor(Math.random()*10);
-        let b = Math.floor(Math.random()*10);
-        console.log(a + '  ' + b)
+        itemText.style.stroke = '';
+        itemText.style.fill = '';
 
-        switch (sign) {
-            case 'plus':
-                itemText.textContent = a + ' + ' + b;
-                result[n] = a+b;
-                break;
-            case 'minus':
-                if (a > b ) {
-                    itemText.textContent = a + ' - ' + b;
-                    result[n] = a-b;
-                } else {
-                    itemText.textContent = b + ' - ' + a;
-                    result[n] = b-a;
-                }
-                break;
-            case 'multiply':
-                itemText.textContent = a + ' x ' + b;
-                result[n] = a*b;
-                break;
-            case 'division':
-                if (a > b ) {
-                    if(b===0) {
-                        while (b===0) {
-                            b = Math.floor(Math.random()*10)
-                        }
-                    }
-                    itemText.textContent = a + ' : ' + b;
-                    result[n] = a/b;
-                } else {
-                    if(a===0) {
-                        while (a===0) {
-                            a = Math.floor(Math.random()*10)
-                        }
-                    }
-                    itemText.textContent = b + ' : ' + a;
-                    result[n] = b/a;
-                }
-                break;
-        }
+        selectAction(itemText, n)
+
         console.log(result[n]);
         let dataSet = itemText.dataset;
         dataSet.result = result[n];
@@ -100,33 +151,33 @@ function addLevelExample(level, sign) {
 
     }
 
-    let textTags = document.querySelectorAll('text');
+    let textTags = level.querySelectorAll('text');
 
     textTags.forEach((textTag)=> {
-        console.log(result.length)
+        console.log(result)
         textTag.addEventListener('click', (e) => {
             resultTextExample = e.target.dataset.result;
             let eventTextBlock = e.target
             controlClick();
 
-            levelBlock.querySelectorAll(`[data-ball = '${e.target.dataset.ball}']`).forEach((item) => {
+            level.querySelectorAll(`[data-ball = '${e.target.dataset.ball}']`).forEach((item) => {
                 item.style.stroke = 'orange';
             })
 
             let ballExample = e.target.dataset.ball;
 
-            calculate(resultTextExample, ballExample, eventTextBlock, z)
+            calculate(level, resultTextExample, ballExample, eventTextBlock, z, numberLevel)
             z++;
             console.log('z - ',z)
+            console.log(level)
         });
 
     })
 
 }
-addLevelExample(level1, 'plus');
 
 
-function calculate(resultTextExample, ballExample, eventTextBlock, z) {
+function calculate(level, resultTextExample, ballExample, eventTextBlock, z, numberLevel) {
     const verify = document.querySelector('.verify');
     const input = document.getElementById('inputForm');
     input.value = '';
@@ -141,7 +192,7 @@ function calculate(resultTextExample, ballExample, eventTextBlock, z) {
         console.log(ballExample);
 
         if (resultTextExample == answer) {
-            levelBlock.querySelectorAll(`[data-ball = '${ballExample}']`)
+            level.querySelectorAll(`[data-ball = '${ballExample}']`)
                 .forEach((item) => {
                     console.log(ballExample)
                 item.style.stroke = arrColor[ballExample];
@@ -168,6 +219,31 @@ function calculate(resultTextExample, ballExample, eventTextBlock, z) {
                     document.querySelector('.title-result').style.display = 'block';
                     document.querySelector('.title-score').style.display = 'block';
                     document.querySelector('.title-score').textContent = `Общий счёт - ${gameScore}`;
+
+                    if(numberLevel === 1) {
+                        // thisLevel.style.display = 'block';
+                        next.style.display = 'block';
+                        next.addEventListener('click', (e)=> {
+                            e.stopPropagation()
+                            next.style.display = 'none';
+                            document.querySelector('.title-result').style.display = 'none';
+                            document.querySelector('.title-score').style.display = 'none';
+                            document.getElementById('verify').removeEventListener('click', buttonHandler)
+
+                            startLevel('level2');
+                        })
+
+                        // thisLevel.addEventListener('click', cleenLevel)
+
+                    } else if (numberLevel === 2) {
+                        // previous.style.display = 'block';
+                        // thisLevel.style.display = 'block';
+                        next.style.display = 'block';
+                    } else {
+                        // previous.style.display = 'block';
+                        // thisLevel.style.display = 'block';
+                    }
+
                 }
 
         } else {
@@ -187,7 +263,35 @@ function calculate(resultTextExample, ballExample, eventTextBlock, z) {
         return z
     }
 
+}
+
+addLevelExample(level1, 1); //Первоначальный запуск всей игры
+
+function startLevel(param) {
+ console.log(param)
+
+        document.querySelectorAll('.level').forEach((elLev)=> {
+            elLev.style.display = 'none';
+            if (elLev.id === param) {
+                elLev.style.display = 'block';
+                addLevelExample(level2, 2)
+            }
+        })
 
 
 }
 
+
+function cleenLevel () {
+
+        thisLevel.style.display = 'none';
+        next.style.display = 'none';
+        level1.style.display = 'none';
+
+        document.querySelector('.title-result').style.display = 'none';
+        document.querySelector('.title-score').style.display = 'none';
+
+        // document.getElementById('verify').removeEventListener('click', buttonHandler)
+        addLevelExample(level1, 1);
+
+}
