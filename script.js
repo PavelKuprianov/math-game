@@ -5,6 +5,7 @@ const modal = document.querySelector('.modal');
 const h2 = document.querySelector('.title-h2');
 
 const verify = document.querySelector('.verify');
+let nameUser = '';
 
 const modalViewHandler = () => {
     modal.classList.toggle('modal--open');
@@ -24,7 +25,7 @@ btnClose.addEventListener('click', (event) => {
         return;
     }
     h2.textContent = `Привет, ${elemForm}!`
-
+    nameUser = elemForm;
         modalViewHandler();
     } );
 })
@@ -39,9 +40,18 @@ const previous = document.getElementById('previous');
 const thisLevel = document.getElementById('this');
 const next = document.getElementById('next');
 
-function selectAction(itemText, n) {
-    let arrSign = ['plus', 'minus', 'multiply', 'plus', 'plus', 'minus', 'multiply', 'plus', 'plus', 'minus', 'plus']
-    let sign = arrSign[Math.floor(Math.random()*10)];
+function selectAction(itemText, n, numberLevel) {
+    let arrSign = ['plus', 'plus', 'plus', 'minus', 'minus', 'minus', 'multiply', 'multiply', 'division', 'division' ]
+    let sign;
+
+    if (numberLevel === 1) {
+        sign = arrSign[Math.floor(Math.random()*6)];
+    } else if (numberLevel === 2) {
+        sign = arrSign[Math.floor(Math.random()*8)];
+    } else {
+        sign = arrSign[Math.floor(Math.random()*3 + 7)];
+        console.log('Действие - ', sign)
+    }
 
     let a = Math.floor(Math.random()*10);
     let b = Math.floor(Math.random()*10);
@@ -65,35 +75,21 @@ function selectAction(itemText, n) {
             result[n] = a*b;
             break;
         case 'division':
-            if (a > b ) {
-                if(b===0) {
-                    while (b===0) {
-                        b = Math.floor(Math.random()*10)
-                    }
-                }
-                itemText.textContent = a + ' : ' + b;
-                result[n] = a/b;
-            } else {
-                if(a===0) {
-                    while (a===0) {
-                        a = Math.floor(Math.random()*10)
-                    }
-                }
-                itemText.textContent = b + ' : ' + a;
-                result[n] = b/a;
-            }
+
+            let resultD = Math.floor(Math.random()*9 + 1);
+            b = Math.floor(Math.random()*9 + 1);
+            a = resultD * b;
+
+            itemText.textContent = a + ' : ' + b;
+            result[n] = a/b;
             break;
     }
     return result[n]
 }
 
-
-// const levelBlock = document.getElementById('level1');
-
-function addLevelExample(level, num) {
+function addLevelExample(level, num, z=0) {
     result.length = 0;
     n = 0;
-    console.log(result)
     level.querySelectorAll(`[data-level = '${num}']`).forEach((itemLevel)=> {
         itemLevel.style.display = 'block';
         itemLevel.style.stroke = '';
@@ -101,7 +97,7 @@ function addLevelExample(level, num) {
         itemLevel.dataset.result = '';
     })
 
-    console.log(level)
+
 
     document.getElementById('textStart').style.display = 'block';
     document.getElementById('textChoice').style.display = 'none';
@@ -120,28 +116,25 @@ function addLevelExample(level, num) {
         titleLevel.textContent ='Уровень 2';
         numberLevel = 2;
     } else {
-        titleLevel.textContent ='Уровень 2';
+        titleLevel.textContent ='Уровень 3';
         numberLevel = 3;
     }
 
     const textExample = level.querySelectorAll('text');
 
     let quantityExamples = textExample.length
-    console.log(quantityExamples)
     textExample.forEach((itemText)=> {
         itemText.style.stroke = '';
         itemText.style.fill = '';
 
-        selectAction(itemText, n)
+        console.log(numberLevel)
+        selectAction(itemText, n, numberLevel)
 
-        console.log(result[n]);
         let dataSet = itemText.dataset;
         dataSet.result = result[n];
-        console.log('itemText - ', itemText);
 
         n++;
     })
-
 
     function controlClick() {
         document.getElementById('textStart').style.display = 'none';
@@ -154,7 +147,6 @@ function addLevelExample(level, num) {
     let textTags = level.querySelectorAll('text');
 
     textTags.forEach((textTag)=> {
-        console.log(result)
         textTag.addEventListener('click', (e) => {
             resultTextExample = e.target.dataset.result;
             let eventTextBlock = e.target
@@ -176,6 +168,7 @@ function addLevelExample(level, num) {
 
 }
 
+let gameScoreLevel=[];
 
 function calculate(level, resultTextExample, ballExample, eventTextBlock, z, numberLevel) {
     const verify = document.querySelector('.verify');
@@ -184,17 +177,14 @@ function calculate(level, resultTextExample, ballExample, eventTextBlock, z, num
 
     verify.addEventListener('click', buttonHandler);
 
-
     function buttonHandler(e) {
         e.stopPropagation()
 
         const answer = input.value;
-        console.log(ballExample);
 
         if (resultTextExample == answer) {
             level.querySelectorAll(`[data-ball = '${ballExample}']`)
                 .forEach((item) => {
-                    console.log(ballExample)
                 item.style.stroke = arrColor[ballExample];
                 item.style.fill = arrColor[ballExample];
             })
@@ -211,16 +201,16 @@ function calculate(level, resultTextExample, ballExample, eventTextBlock, z, num
                 }, 1000);
                 resultTextExample = '';
                 input.value ='';
-                console.log('Верно!');
-                console.log(z);
+
                 if (Number(z+1)=== result.length) {
                     document.getElementById('textStart').style.display = 'none';
                     document.getElementById('textOffer').style.display = 'none';
                     document.querySelector('.title-result').style.display = 'block';
                     document.querySelector('.title-score').style.display = 'block';
                     document.querySelector('.title-score').textContent = `Общий счёт - ${gameScore}`;
-
+                    console.log(numberLevel)
                     if(numberLevel === 1) {
+
                         // thisLevel.style.display = 'block';
                         next.style.display = 'block';
                         next.addEventListener('click', (e)=> {
@@ -229,21 +219,40 @@ function calculate(level, resultTextExample, ballExample, eventTextBlock, z, num
                             document.querySelector('.title-result').style.display = 'none';
                             document.querySelector('.title-score').style.display = 'none';
                             document.getElementById('verify').removeEventListener('click', buttonHandler)
-
-                            startLevel('level2');
+                            gameScoreLevel.push(gameScore)
+                            console.log('Счет после первого уровня -', gameScoreLevel)
+                            console.log('Номер уровня после первого уровня -', numberLevel)
+                            startLevel('level2', numberLevel+1);
                         })
+                        next.removeEventListener('click', ()=> {
+                            startLevel('level2', numberLevel+1)
+                        } )
 
                         // thisLevel.addEventListener('click', cleenLevel)
 
                     } else if (numberLevel === 2) {
-                        // previous.style.display = 'block';
-                        // thisLevel.style.display = 'block';
-                        next.style.display = 'block';
-                    } else {
-                        // previous.style.display = 'block';
-                        // thisLevel.style.display = 'block';
-                    }
 
+                        next.removeEventListener('click', ()=> {
+                            startLevel('level2', numberLevel+1)
+                        } )
+
+                        next.style.display = 'block';
+                        next.addEventListener('click', (e)=> {
+                            e.stopPropagation()
+                            next.style.display = 'none';
+                            document.querySelector('.title-result').style.display = 'none';
+                            document.querySelector('.title-score').style.display = 'none';
+                            document.getElementById('verify').removeEventListener('click', buttonHandler)
+                            gameScoreLevel.push(gameScore)
+                            console.log('Счет после второго уровня -', gameScoreLevel)
+                            startLevel('level3', numberLevel+1);
+                        })
+
+                    } else {
+                        gameScoreLevel.push(gameScore)
+                        console.log('Счет после третьего уровня -', gameScoreLevel)
+                        gameOver(gameScore);
+                    }
                 }
 
         } else {
@@ -267,31 +276,27 @@ function calculate(level, resultTextExample, ballExample, eventTextBlock, z, num
 
 addLevelExample(level1, 1); //Первоначальный запуск всей игры
 
-function startLevel(param) {
- console.log(param)
+function startLevel(param, numberLevel) {
 
         document.querySelectorAll('.level').forEach((elLev)=> {
             elLev.style.display = 'none';
             if (elLev.id === param) {
                 elLev.style.display = 'block';
-                addLevelExample(level2, 2)
+                addLevelExample(elLev, numberLevel)
             }
         })
-
-
 }
 
+function gameOver (gameScore) {
+    const modalFinal = document.querySelector('.modal-final');
+    const modalViewFinal = () => {
+        modalFinal.classList.add('modal--open');
+    }
 
-function cleenLevel () {
+    const modalTitleFinal = document.querySelector('.modal-title-final');
+    const modalTextFinal = document.querySelector('.modal-text-final');
+    modalTitleFinal.textContent = `${nameUser}, ты молодец!`;
+    modalTextFinal.textContent = `Сумма набранных тобой баллов состаляет ${gameScore}`;
 
-        thisLevel.style.display = 'none';
-        next.style.display = 'none';
-        level1.style.display = 'none';
-
-        document.querySelector('.title-result').style.display = 'none';
-        document.querySelector('.title-score').style.display = 'none';
-
-        // document.getElementById('verify').removeEventListener('click', buttonHandler)
-        addLevelExample(level1, 1);
-
+    modalViewFinal();
 }
