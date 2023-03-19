@@ -11,7 +11,18 @@ const modalViewHandler = () => {
     modal.classList.toggle('modal--open');
 }
 
-document.addEventListener('DOMContentLoaded', ()=> {
+document.addEventListener('DOMContentLoaded', async ()=> {
+
+    if(navigator.serviceWorker) {
+        try {
+            const reg = await navigator.serviceWorker.register('/sw.js')  
+          console.log('Service worker register success', reg)
+        } catch (e) {
+            console.log('Service worker register fail')
+        }
+        
+    }
+
     modalViewHandler();
 
 btnClose.addEventListener('click', (event) => {
@@ -47,14 +58,14 @@ function selectAction(itemText, n, numberLevel) {
     if (numberLevel === 1) {
         sign = arrSign[Math.floor(Math.random()*6)];
     } else if (numberLevel === 2) {
-        sign = arrSign[Math.floor(Math.random()*8)];
+        sign = arrSign[Math.floor(Math.random()*5+2)];
     } else {
         sign = arrSign[Math.floor(Math.random()*3 + 7)];
         console.log('Действие - ', sign)
     }
 
-    let a = Math.floor(Math.random()*10);
-    let b = Math.floor(Math.random()*10);
+    let a = Math.floor(Math.random()*8+2);
+    let b = Math.floor(Math.random()*8+2);
 
     switch (sign) {
         case 'plus':
@@ -71,13 +82,13 @@ function selectAction(itemText, n, numberLevel) {
             }
             break;
         case 'multiply':
-            itemText.textContent = a + ' x ' + b;
+            itemText.innerHTML = a + ' &#183; ' + b;
             result[n] = a*b;
             break;
         case 'division':
 
-            let resultD = Math.floor(Math.random()*9 + 1);
-            b = Math.floor(Math.random()*9 + 1);
+            let resultD = Math.floor(Math.random()*9 + 2);
+            b = Math.floor(Math.random()*9 + 2);
             a = resultD * b;
 
             itemText.textContent = a + ' : ' + b;
@@ -168,7 +179,22 @@ function addLevelExample(level, num, z=0) {
 
 }
 
+function nextHandler(numberLevel, gameScore) {
+    currentScore = gameScore - currentScore;
+    next.style.display = 'none';
+    document.querySelector('.title-result').style.display = 'none';
+    document.querySelector('.title-score').style.display = 'none';
+    gameScoreLevel.push(currentScore);
+
+    console.log(`Счет после ${numberLevel} уровня -`, gameScoreLevel)
+    console.log(`Номер уровня после ${numberLevel} уровня -`, numberLevel);
+    console.log(`Текущий счет -`, currentScore);
+    let param = `level${numberLevel+1}`;
+    startLevel(param, numberLevel+1);
+}
+
 let gameScoreLevel=[];
+let currentScore = 0;
 
 function calculate(level, resultTextExample, ballExample, eventTextBlock, z, numberLevel) {
     const verify = document.querySelector('.verify');
@@ -215,43 +241,23 @@ function calculate(level, resultTextExample, ballExample, eventTextBlock, z, num
                         next.style.display = 'block';
                         next.addEventListener('click', (e)=> {
                             e.stopPropagation()
-                            next.style.display = 'none';
-                            document.querySelector('.title-result').style.display = 'none';
-                            document.querySelector('.title-score').style.display = 'none';
                             document.getElementById('verify').removeEventListener('click', buttonHandler)
-                            gameScoreLevel.push(gameScore)
-                            console.log('Счет после первого уровня -', gameScoreLevel)
-                            console.log('Номер уровня после первого уровня -', numberLevel)
-                            startLevel('level2', numberLevel+1);
-                        })
-                        next.removeEventListener('click', ()=> {
-                            startLevel('level2', numberLevel+1)
-                        } )
 
-                        // thisLevel.addEventListener('click', cleenLevel)
+                            nextHandler(numberLevel, gameScore)
+                        })
+                        next.removeEventListener('click', nextHandler)
 
                     } else if (numberLevel === 2) {
 
-                        next.removeEventListener('click', ()=> {
-                            startLevel('level2', numberLevel+1)
-                        } )
-
                         next.style.display = 'block';
                         next.addEventListener('click', (e)=> {
-                            e.stopPropagation()
-                            next.style.display = 'none';
-                            document.querySelector('.title-result').style.display = 'none';
-                            document.querySelector('.title-score').style.display = 'none';
-                            document.getElementById('verify').removeEventListener('click', buttonHandler)
-                            gameScoreLevel.push(gameScore)
-                            console.log('Счет после второго уровня -', gameScoreLevel)
-                            startLevel('level3', numberLevel+1);
+                            nextHandler(numberLevel, gameScore)
                         })
 
                     } else {
                         gameScoreLevel.push(gameScore)
                         console.log('Счет после третьего уровня -', gameScoreLevel)
-                        gameOver(gameScore);
+                        gameOver(gameScore, gameScoreLevel);
                     }
                 }
 
@@ -287,16 +293,26 @@ function startLevel(param, numberLevel) {
         })
 }
 
-function gameOver (gameScore) {
+function gameOver (gameScore, gameScoreLevel) {
     const modalFinal = document.querySelector('.modal-final');
     const modalViewFinal = () => {
         modalFinal.classList.add('modal--open');
     }
-
     const modalTitleFinal = document.querySelector('.modal-title-final');
     const modalTextFinal = document.querySelector('.modal-text-final');
+    const item1 = document.getElementById('item1');
+    const item2 = document.getElementById('item2');
+    const item3 = document.getElementById('item3');
+
     modalTitleFinal.textContent = `${nameUser}, ты молодец!`;
+    item1.textContent = `Баллы, набранные в 1 уровне - ${gameScoreLevel[0]}`;
+    item2.textContent = `Баллы, набранные во 2 уровне - ${gameScoreLevel[1]}`;
+    item3.textContent = `Баллы, набранные в 3 уровне - ${gameScoreLevel[3]-gameScoreLevel[0]-gameScoreLevel[1]}`;
     modalTextFinal.textContent = `Сумма набранных тобой баллов состаляет ${gameScore}`;
 
     modalViewFinal();
 }
+
+document.querySelector('.btn-final').addEventListener('click', ()=> {
+    window.location.reload();
+})

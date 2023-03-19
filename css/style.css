@@ -191,6 +191,7 @@ text:hover {
     margin-bottom: 20px;
 }
 .modal-text {
+    text-align: center;
     margin-bottom: 10px;
     font-size: 18px;
 }
@@ -306,4 +307,24 @@ text:hover {
     transform: translateY(0%) scale(1);
     opacity: 1;
 }
-
+.modal-title-final {
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.modal-item{
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.modal-text-final{
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+.btn-final {
+    display: flex;
+    justify-content: center;
+}
+.modal-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.6);
+}
