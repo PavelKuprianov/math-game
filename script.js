@@ -6,6 +6,7 @@ const h2 = document.querySelector('.title-h2');
 
 const verify = document.querySelector('.verify');
 let nameUser = '';
+let ageUser = '';
 
 const modalViewHandler = () => {
     modal.classList.toggle('modal--open');
@@ -25,21 +26,57 @@ document.addEventListener('DOMContentLoaded', async ()=> {
 
     modalViewHandler();
 
-btnClose.addEventListener('click', (event) => {
-        event.preventDefault();
+    btnClose.addEventListener('click', (event) => {
+            event.preventDefault();
 
-    //Добавление имени игрока
-    const form = document.forms.form;
-    let elemForm = form.elements.name.value
-    if (!elemForm) {
-        alert('Вы не заполнили поле с именем! Как мы будем общаться?')
-        return;
-    }
-    h2.textContent = `Привет, ${elemForm}!`
-    nameUser = elemForm;
+        //Добавление имени игрока
+        const form = document.forms.form;
+        let elemForm = form.elements.name.value;
+        let elemFormAge = form.elements.age.value;
+        if (!elemForm || !elemFormAge) {
+            alert('Вы не заполнили одно из полей знакомства! Как мы будем общаться?')
+            return;
+        }
+
+        h2.textContent = `Привет, ${elemForm}!`
+        nameUser = elemForm;
+        ageUser = elemFormAge;
+
+        let remains;
+
+        if (Number(ageUser)<=5) {
+            remains = 90;            
+        } else if (Number(ageUser)<=7) {
+            remains  = 600;
+        } else {
+            remains = 2700;
+        }
+
+        countdown(remains); // вызов функции
+
         modalViewHandler();
     } );
 })
+
+function countdown(remains){ // функция обратного отсчета
+    let min = remains > 0 ? Math.floor(remains/60)%60 : 0;
+    let sec = remains > 0 ? Math.floor(remains)%60 : 0;
+    document.getElementById('minute').textContent = min < 10 ? '0' + min : min;
+    document.getElementById('second').textContent = sec < 10 ? '0' + sec : sec;
+
+    remains--; // уменьшаем число на единицу
+    if (remains<0){
+        clearTimeout(timer); // таймер остановится на нуле
+        gameOver(gameScore, gameScoreLevel, 'время истекло!');
+    } else if (remains === 'end') {
+        clearTimeout(timer);
+    } else {
+        timer = setTimeout(countdown, 1000, remains);
+    }
+
+}
+
+
 let z = 0;
 let gameScore = 0;
 const level1 = document.getElementById('level1');
@@ -51,6 +88,8 @@ const previous = document.getElementById('previous');
 const thisLevel = document.getElementById('this');
 const next = document.getElementById('next');
 
+
+
 function selectAction(itemText, n, numberLevel) {
     let arrSign = ['plus', 'plus', 'plus', 'minus', 'minus', 'minus', 'multiply', 'multiply', 'division', 'division' ]
     let sign;
@@ -61,7 +100,6 @@ function selectAction(itemText, n, numberLevel) {
         sign = arrSign[Math.floor(Math.random()*5+2)];
     } else {
         sign = arrSign[Math.floor(Math.random()*3 + 7)];
-        console.log('Действие - ', sign)
     }
 
     let a = Math.floor(Math.random()*8+2);
@@ -98,7 +136,11 @@ function selectAction(itemText, n, numberLevel) {
     return result[n]
 }
 
+
+
 function addLevelExample(level, num, z=0) {
+
+
     result.length = 0;
     n = 0;
     level.querySelectorAll(`[data-level = '${num}']`).forEach((itemLevel)=> {
@@ -138,7 +180,6 @@ function addLevelExample(level, num, z=0) {
         itemText.style.stroke = '';
         itemText.style.fill = '';
 
-        console.log(numberLevel)
         selectAction(itemText, n, numberLevel)
 
         let dataSet = itemText.dataset;
@@ -171,8 +212,7 @@ function addLevelExample(level, num, z=0) {
 
             calculate(level, resultTextExample, ballExample, eventTextBlock, z, numberLevel)
             z++;
-            console.log('z - ',z)
-            console.log(level)
+
         });
 
     })
@@ -186,9 +226,7 @@ function nextHandler(numberLevel, gameScore) {
     document.querySelector('.title-score').style.display = 'none';
     gameScoreLevel.push(currentScore);
 
-    console.log(`Счет после ${numberLevel} уровня -`, gameScoreLevel)
-    console.log(`Номер уровня после ${numberLevel} уровня -`, numberLevel);
-    console.log(`Текущий счет -`, currentScore);
+
     let param = `level${numberLevel+1}`;
     startLevel(param, numberLevel+1);
 }
@@ -234,7 +272,6 @@ function calculate(level, resultTextExample, ballExample, eventTextBlock, z, num
                     document.querySelector('.title-result').style.display = 'block';
                     document.querySelector('.title-score').style.display = 'block';
                     document.querySelector('.title-score').textContent = `Общий счёт - ${gameScore}`;
-                    console.log(numberLevel)
                     if(numberLevel === 1) {
 
                         // thisLevel.style.display = 'block';
@@ -256,13 +293,11 @@ function calculate(level, resultTextExample, ballExample, eventTextBlock, z, num
 
                     } else {
                         gameScoreLevel.push(gameScore)
-                        console.log('Счет после третьего уровня -', gameScoreLevel)
                         gameOver(gameScore, gameScoreLevel);
                     }
                 }
 
         } else {
-                console.log('неправильно!!!!');
                 document.querySelector('.title-error').style.display = 'block';
                 document.querySelector('.answer').style.display = 'none';
                 input.value ='';
@@ -274,6 +309,7 @@ function calculate(level, resultTextExample, ballExample, eventTextBlock, z, num
                 gameScore -=1;
                 buttonHandler()
         }
+        
         document.getElementById('verify').removeEventListener('click', buttonHandler)
         return z
     }
@@ -293,7 +329,9 @@ function startLevel(param, numberLevel) {
         })
 }
 
-function gameOver (gameScore, gameScoreLevel) {
+// setTimeout(gameOver, timer, gameScore, gameScoreLevel, 'время истекло!')
+
+function gameOver (gameScore, gameScoreLevel, message = 'ты молодец!') {
     const modalFinal = document.querySelector('.modal-final');
     const modalViewFinal = () => {
         modalFinal.classList.add('modal--open');
@@ -304,11 +342,29 @@ function gameOver (gameScore, gameScoreLevel) {
     const item2 = document.getElementById('item2');
     const item3 = document.getElementById('item3');
 
-    modalTitleFinal.textContent = `${nameUser}, ты молодец!`;
-    item1.textContent = `Баллы, набранные в 1 уровне - ${gameScoreLevel[0]}`;
-    item2.textContent = `Баллы, набранные во 2 уровне - ${gameScoreLevel[1]}`;
-    item3.textContent = `Баллы, набранные в 3 уровне - ${gameScoreLevel[3]-gameScoreLevel[0]-gameScoreLevel[1]}`;
-    modalTextFinal.textContent = `Сумма набранных тобой баллов состаляет ${gameScore}`;
+    modalTitleFinal.textContent = `${nameUser}, ${message}`;
+    let sum1 = 0;
+    if (gameScoreLevel[0]) {
+        sum1 = gameScoreLevel[0];
+        item1.textContent = `Баллы, набранные в 1 уровне - ${gameScoreLevel[0]}`;   
+    }
+    let sum2 = 0;
+    if (gameScoreLevel[1]) {
+        sum2 = gameScoreLevel[1];
+        item2.textContent = `Баллы, набранные во 2 уровне - ${gameScoreLevel[1]}`;  
+    }
+    let sum3 = 0;
+    if (gameScoreLevel[3]-gameScoreLevel[0]-gameScoreLevel[1]) {
+        sum3 = gameScoreLevel[3]-gameScoreLevel[0]-gameScoreLevel[1]
+        item3.textContent = `Баллы, набранные в 3 уровне - ${gameScoreLevel[3]-gameScoreLevel[0]-gameScoreLevel[1]}`;
+    }
+    if (message === 'время истекло!') {
+        modalTextFinal.textContent = `Сумма набранных тобой баллов состаляет ${sum1 + sum2 + sum3}`;
+    } else {
+        modalTextFinal.textContent = `Сумма набранных тобой баллов состаляет ${gameScore}`;
+        countdown('end');
+        document.getElementById('rocket').style.display = 'none';
+    }
 
     modalViewFinal();
 }

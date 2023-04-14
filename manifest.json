@@ -1,10 +1,10 @@
 {
     "name": "Весёлая математика",
-    "short_name": "Fun math",
+    "short_name": "Математика",
     "theme_color": "#3699e7",
     "background_color": "#3699e7",
     "display": "standalone",
-    "orientation": "landscape",
+    "orientation": "portrait",
     "start_url": ".",
     "icons": [
         {

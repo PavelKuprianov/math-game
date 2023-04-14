@@ -369,10 +369,21 @@
 
         </div>
         <div class="game__result">
+
+            <div id="rocket">
+                <p>
+                    Осталось: 
+                    <span id="minute"></span> мин.
+                    <span id="second"></span> сек.
+                </p>
+            </div>
+
+
             <h1 class="title"></h1>
+
             <h2 class="title-h2">Привет, друг!</h2>
             <p id="textOffer" class="text">Давай вместе разукрасим картинку!</p>
-            <p id="textStart" class="text">Кликни мышкой по примеру, который будем решать</p>
+            <p id="textStart" class="text">Кликни по примеру, который будем решать</p>
             <p id="textChoice" class="text">Реши пример, напиши верный ответ и нажми "Проверить"</p>
             <h2 class="title-error">Где-то закралась ошибка! Подумай получше!</h2>
             <h2 class="title-correctly">Все верно!</h2>
@@ -398,17 +409,17 @@
 
     <section class="modal">
         <div class="modal-wrap">
+            <div class="modal-img">
+                <img src="img/assets/icons/icon-128x128.png" alt="">
+            </div>
             <h2 class="modal-title">Привет, мой друг!</h2>
             <p class="modal-text">Тебе предстоит решить несколько простых математических примеров.</p>
-            <p class="modal-text">Задание состоит из 3-х уровней.</p>
-            <p class="modal-text">На первом уровне будут предложены примеры на сложение и вычитание.</p>
-            <p class="modal-text">На втором - примеры на вычитание и умножение.</p>
-            <p class="modal-text">В тетьем уровне даны примеры на умножение и деление.</p>
-            <p class="modal-text">За каждый правильный ответ будет начислено 10 баллов, за допущенную ошибку 1 балл удержан</p>
+            <p class="modal-text">За каждый правильный ответ начисляется 10 баллов, за ошибку удерживается 1 балл</p>
             <p class="modal-text">Сначала давай познакомимся! </p>
-            <p class="modal-text">Напиши свое имя и нажми кнопку "ОК"!</p>
+            <p class="modal-text">Заполни поля и нажми кнопку "ОК"!</p>
             <form name="form" class="modal__form">
-                <input type="text" name="name" id="name" required>
+                <input type="text" name="name" id="name" required placeholder="Твое имя">
+                <input type="number" name="age" id="age" required placeholder="Сколько тебе лет?">
                 <input class="modal-btn modal-btn-start" type="submit" value="OK">
             </form>
         </div>

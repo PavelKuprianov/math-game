@@ -37,6 +37,7 @@ html {
 }
 
 body {
+  width: 100vw;
   min-width: 320px;
   min-height: 100vh;
   font-family: Montserrat;
