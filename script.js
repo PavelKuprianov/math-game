@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', async ()=> {
         const form = document.forms.form;
         let elemForm = form.elements.name.value;
         let elemFormAge = form.elements.age.value;
-        if (!elemForm || !elemFormAge) {
-            alert('Вы не заполнили одно из полей знакомства! Как мы будем общаться?')
+        if (!elemForm || !elemFormAge || Number(elemFormAge)<1) {
+            alert('Вы не корретно заполнили или забыли заполнить одно из полей знакомства! Как мы будем общаться?')
             return;
         }
 
@@ -191,7 +191,7 @@ function addLevelExample(level, num, z=0) {
     function controlClick() {
         document.getElementById('textStart').style.display = 'none';
         document.getElementById('textChoice').style.display = 'block';
-        document.querySelector('.answer').style.display = 'block';
+        document.querySelector('.answer').style.display = 'flex';
         document.querySelector('.cover').style.display = 'block';
 
     }
@@ -359,8 +359,35 @@ function gameOver (gameScore, gameScoreLevel, message = 'ты молодец!') 
         item3.textContent = `Баллы, набранные в 3 уровне - ${gameScoreLevel[3]-gameScoreLevel[0]-gameScoreLevel[1]}`;
     }
     if (message === 'время истекло!') {
+        if ((sum1 + sum2 + sum3) == 120) {
+            document.getElementById('img-final').src = 'img/apple_jam.png';
+            document.querySelector('.img-text').textContent = 'Ты заслужил яблочное варенье!'
+        } else if ((sum1 + sum2 + sum3) < 120 && ((sum1 + sum2 + sum3) >= 50) ) {
+            document.getElementById('img-final').src = 'img/3apple.png';
+            document.querySelector('.img-text').textContent = 'Ты все решил, но есть недочеты!'
+        } else if ((sum1 + sum2 + sum3) <= 50 && ((sum1 + sum2 + sum3) > 20) ){
+            document.getElementById('img-final').src = 'img/2apple.png';
+            document.querySelector('.img-text').textContent = 'Неплохо, но есть еще над чем работать!'
+ 
+        } else if ((sum1 + sum2 + sum3) <= 20 && ((sum1 + sum2 + sum3) > 0) ){
+            document.getElementById('img-final').src = 'img/apple.png';
+            document.querySelector('.img-text').textContent = 'Маловато решено, надо еще потрудиться! Пока только одно яблоко!'
+ 
+        }
+         else {
+            document.getElementById('img-final').src = 'img/cone.png';
+            document.querySelector('.img-text').textContent = 'Тебе надо подучиться, пока твоя только шишка!'
+ 
+        }
         modalTextFinal.textContent = `Сумма набранных тобой баллов состаляет ${sum1 + sum2 + sum3}`;
     } else {
+        if (gameScore == 120) {
+            document.getElementById('img-final').src = 'img/apple_jam.png';
+            document.querySelector('.img-text').textContent = 'Ты заслужил яблочное варенье!'
+        } else {
+            document.getElementById('img-final').src = 'img/apple_basket.png';
+            document.querySelector('.img-text').textContent = 'Ты немного недобрал баллов, поэтому варенье будешь варить сам!'
+        }
         modalTextFinal.textContent = `Сумма набранных тобой баллов состаляет ${gameScore}`;
         countdown('end');
         document.getElementById('rocket').style.display = 'none';

@@ -90,6 +90,8 @@ text:hover {
 #textChoice,
 .answer {
     display: none;
+    flex-direction: column;
+    text-align: center;
 }
 .answer__form {
     display: flex;
@@ -334,6 +336,20 @@ text:hover {
 #rocket {
     align-self: flex-end;
     margin-right: 5%;
+}
+.final-block{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.final-block-img{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#img-final{
+    object-fit: contain;
+
 }
 
 /* @media (max-width: 601px) {

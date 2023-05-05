@@ -381,13 +381,17 @@
 
             <h1 class="title"></h1>
 
-            <h2 class="title-h2">Привет, друг!</h2>
+            <h2 class="title-h2">Привет, дружок!</h2>
             <p id="textOffer" class="text">Давай вместе разукрасим картинку!</p>
             <p id="textStart" class="text">Кликни по примеру, который будем решать</p>
             <p id="textChoice" class="text">Реши пример, напиши верный ответ и нажми "Проверить"</p>
             <h2 class="title-error">Где-то закралась ошибка! Подумай получше!</h2>
             <h2 class="title-correctly">Все верно!</h2>
-            <h2 class="title-result">Уровень пройден!</h2>
+            
+            <div class="title-result">
+                <h2 class="title-result">Уровень пройден!</h2>
+                <img src="img/apple.png" alt="">
+            </div>
             <h2 class="title-score"></h2>
 
             <div class="answer">
@@ -396,6 +400,9 @@
                         <input id="inputForm" type="number" required>
                         <button id="verify" class="verify modal-btn">Проверить</button>
                     </div>
+                </div>
+                <div class="answer-img">
+                    <img src="img/hedgehog.jpeg" alt="">
                 </div>
             </div>
 
@@ -412,9 +419,10 @@
             <div class="modal-img">
                 <img src="img/assets/icons/icon-128x128.png" alt="">
             </div>
-            <h2 class="modal-title">Привет, мой друг!</h2>
-            <p class="modal-text">Тебе предстоит решить несколько простых математических примеров.</p>
-            <p class="modal-text">За каждый правильный ответ начисляется 10 баллов, за ошибку удерживается 1 балл</p>
+            <h2 class="modal-title">Привет, дружок!</h2>
+            <h2 class="modal-title">Я учёный Ёж Тимофей!</h2>
+            <p class="modal-text">Нам с тобой предстоит решить несколько простых примеров.</p>
+            <p class="modal-text">За каждый правильный ответ я дам тебе 10 баллов, за ошибку 1 балл заберу</p>
             <p class="modal-text">Сначала давай познакомимся! </p>
             <p class="modal-text">Заполни поля и нажми кнопку "ОК"!</p>
             <form name="form" class="modal__form">
@@ -427,11 +435,18 @@
     <section class="modal-final">
         <div class="modal-wrap-final">
             <h2 class="modal-title-final"></h2>
-            <ul class="modal-list-final">
-                <li id="item1" class="modal-item"></li>
-                <li id="item2" class="modal-item"></li>
-                <li id="item3" class="modal-item"></li>
-            </ul>
+            <div class="final-block">
+                <ul class="modal-list-final">
+                    <li id="item1" class="modal-item"></li>
+                    <li id="item2" class="modal-item"></li>
+                    <li id="item3" class="modal-item"></li>
+                </ul>
+                <div class="final-block-img">
+                    <img src="img/apple.png" alt="" id="img-final">
+                    <p class="img-text">Финальный текст</p>
+                </div>
+            </div>
+
             <p class="modal-text-final"></p>
             <p class="modal-text">Сделай скриншот и покажи результат преподавателю</p>
             <div class="btn-final">
